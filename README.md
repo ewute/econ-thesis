@@ -1,10 +1,8 @@
-# Undergraduate thesis: The Economy (Taylor's Version): Pop Concerts Helped The Economy Shake Off a Pandemic Slump
+# The effect of media adaptation as a form of advertisement
 
 ## Project Overview
 
-This project explores the effects of a Taylor Swift concert on local business traffic and sales. It utilizes data from taylorswift.com to index her concert dates and locations, and merges this information with local business data on traffic and sales. 
-
-The project consists of two main parts: data collection and analysis. Initially, the concert dates and locations are scraped from taylorswift.com using web scraping techniques. The local business data on traffic and sales is collected from various sources. The collected data is then cleaned and merged to create a unified dataset for analysis. The analysis is performed using R, and the findings are documented in an RMarkdown report. 
+This project investigates the impact of media adaptations—such as anime, films, and television series—on the commercial success of their source material. Specifically, it examines how adaptations influence manga and book sales, leveraging real-world data from Japan's Oricon sales charts and industry sources.
 
 To replicate the project, an internet connection and access to R are required. Running the code files in order will generate the final report. It is important to run the scripts before attempting to knit the RMarkdown document.
 
