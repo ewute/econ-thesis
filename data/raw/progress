@@ -1,0 +1,20 @@
+#+title: Progress
+
+1. From Oricon database, a certain website holds all top manga
+2. Crawl through the website for all the links
+3. Create a dictionary of the years corresponding to the links with the weekly data (contains {year} and "weekly")
+4. Dispose of all other urls and create that as first .csv
+5. Create a test scraping for the first url
+6. Expand for all urls, creating a seperate .csv for each url
+7. Merge all .csv files together for the complete charts
+8. Clean up the titles and create a seperate .csv for scraping/api usage
+9. Use MAL api
+   1. Holy moly it sucks so bad. I can't find a single correct ID.
+    New plan: use AniList API to get the ID .... Or just use AniList or Anidb
+   2. Plan 2; use anilist, learn how to use graphQL API request
+   3. Maybe transfer using idMal to get MAL info? not sure yet
+      1. First step first, I need to learn GraphQL,
+         get some requests in from AniList
+      2. Maybe transfer it to MAL
+10. New thing; got all manga and anime from api requests anilist. Took around 3 hours with that many listings. Worry: I'm concerned about part 2 or part 3 of an anime... not sure what to do about that.
+    1. Just got all anime and manga... there are some issues but got all data I think

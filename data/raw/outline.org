@@ -1,0 +1,12 @@
+#+title: Outline
+
+* These are my current thoughts and plans on my thesis
+
+* TODO Thesis [0/6]
+- [ ] Scrape for each manga title and the corresponding statistics
+  - [ ] I'm thinking aired, premiered, broadcast, producers, licensors, studios, genres, demographics, rating, score, rank, popularity, members, favorites as revelant statisitcs
+- [ ] Merge the two datasets into one. Prefereably left I think
+- [ ] Figure out a more standard naming convention for weeks
+- [ ] Clean up my current oricon dataset
+- [ ] Write up my data collection when I finish
+- [ ] Start writing up introduction and other things
