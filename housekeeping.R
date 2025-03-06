@@ -1,5 +1,5 @@
 # Housekeeping.R
-# By: Your Name
+# By: Ethan Wu
 # Date: YYYY-MM-DD
 # What: This script loads the packages and data needed for the paper.
 
