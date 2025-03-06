@@ -73,5 +73,9 @@ charts_corrections <- charts_corrections %>%
   ) %>%
   select(SERIES, TITLE, WEEKLY, TOTAL, final_date)  # Keep only relevant columns
 
+# Rename columns to lowercase
+charts_corrections <- charts_corrections %>%
+  rename_with(tolower)
+
 # Save the cleaned data
 write_csv(charts_corrections, file.path(clean_dir, "oricon_all_charts_cleaned.csv"))
