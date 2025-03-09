@@ -1,3 +1,5 @@
+source('housekeeping.R')
+
 # Read in .csv files
 charts <- read_csv(file.path(raw_dir, "oricon_all_charts_sorted.csv"))
 
