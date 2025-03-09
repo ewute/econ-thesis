@@ -36,6 +36,7 @@ error_rows <- which(diff(charts_cleaned$final_date) < 0)[-1]
 
 charts_corrections <- charts_cleaned %>%
   mutate(
+    # Manually correct the dates
     month2 = ifelse(row_number() >= 351 & row_number() <= 450, 5, month2),  # Change month to May
     month2 = ifelse(row_number() >= 36961 & row_number() <= 37160, 12, month2),  # Change month to December
     Year = ifelse(row_number() >= 2731 & row_number() <= 2880, 2008, Year),  # Change Year to 2008
