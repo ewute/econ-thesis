@@ -9,4 +9,6 @@ index <- subset(index, !apply(index == "N/A", 1, any, na.rm = TRUE))
 # Make headings lowercase for easier merging
 index <- index %>%
   rename_all(tolower)
-             
+
+# Save the cleaned index
+write_csv(index, file.path(clean_dir, "index_cleaned.csv"))
