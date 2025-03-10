@@ -18,6 +18,10 @@ index <- index %>%
 index <- index %>%
   rename(mean_score = meanscore)
 
+# Change startdate and enddate to start_date and end_date
+index <- index %>%
+  rename(start_date = startdate, end_date = enddate)
+
 # Drop columns id, mal_id
 index <- index %>%
   select(-id, -mal_id)
