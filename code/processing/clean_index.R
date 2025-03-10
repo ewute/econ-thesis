@@ -14,6 +14,10 @@ index <- index %>%
 index <- index %>%
   rename_all(~gsub("anime_", "", .))
 
+# Change meanscore to mean_score
+index <- index %>%
+  rename(mean_score = meanscore)
+
 # Drop columns id, mal_id
 index <- index %>%
   select(-id, -mal_id)
