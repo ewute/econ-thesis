@@ -17,5 +17,6 @@ anime_index <- anime_index %>%
 merged_data <- manga_charts %>%
   left_join(anime_index, by = c("title_romaji" = "search_title"), suffix = c("_manga_charts", "_anime_index"))
 
-# Save the merged data
+# Save the merged datasets
 write_csv(merged_data, file.path(clean_dir, "merged_data.csv"))
+write_csv(manga_charts, file.path(clean_dir, "merged_manga.csv"))
