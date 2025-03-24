@@ -43,5 +43,5 @@ manga_index <- manga_index %>%
   select(-id, -mal_id)
 
 # Save the cleaned index
-write_csv(anime_index, file.path(clean_dir, "index_cleaned.csv"))
-write_csv(manga_index, file.path(clean_dir, "index_cleaned.csv"))
+write_csv(anime_index, file.path(clean_dir, "anime_index_cleaned.csv"))
+write_csv(manga_index, file.path(clean_dir, "manga_index_cleaned.csv"))
