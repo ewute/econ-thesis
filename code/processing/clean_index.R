@@ -4,16 +4,19 @@ source('housekeeping.R')
 anime_index <- read_csv(file.path(raw_dir, "anime_data.csv"))
 manga_index <- read_csv(file.path(raw_dir, "manga_data.csv"))
 
-# Remove "N/A" values from the index
-anime_index <- subset(anime_index, !apply(anime_index == "N/A", 1, any, na.rm = TRUE))
-manga_index <- subset(manga_index, !apply(manga_index == "N/A", 1, any, na.rm = TRUE))
-
 # Make headings lowercase for easier merging
 anime_index <- anime_index %>%
   rename_all(tolower)
 
 manga_index <- manga_index %>%
   rename_all(tolower)
+
+# Convert "N/A" string to NA
+anime_index <- anime_index %>%
+  mutate_all(~na_if(., "N/A"))
+
+manga_index <- manga_index %>%
+  mutate_all(~na_if(., "N/A"))
 
 # Remove headings with "anime_"
 anime_index <- anime_index %>%
