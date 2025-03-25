@@ -60,6 +60,9 @@ ggplot(df_treated, aes(x = time_since_top_charting_day_treated)) +
        y = "Weekly Sales") +
   theme_minimal()
 
+# Save the plot
+ggsave(file.path(output_dir, "time_since_top_charting_day_treated.png"), width = 8, height = 6)
+
 # Create a variable for manga that never had an anime adaptation
 df <- df %>%
   mutate(never_adapted = ifelse(search_title %in% anime_index$search_title, 0, 1))
@@ -83,6 +86,9 @@ ggplot(df_untreated, aes(x = time_since_top_charting_day_untreated)) +
        x = "Time Since Top Charting Day (Days)",
        y = "Weekly Sales") +
   theme_minimal()
+
+# Save the plot
+ggsave(file.path(output_dir, "time_since_top_charting_day_untreated.png"), width = 8, height = 6)
 
 # For treated manga, use the time_since_top_charting_day_treated
 df_treated <- df %>%
@@ -113,6 +119,9 @@ ggplot(df_combined, aes(x = time_since_top_charting_day, y = weekly, color = tre
        y = "Weekly Sales") +
   theme_minimal()
 
+# Save the plot
+ggsave(file.path(output_dir, "time_since_top_charting_day.png"), width = 8, height = 6)
+
 # Plot the combined data from time_since_adaptation as histograms
 ggplot(df_combined, aes(x = time_since_adaptation, fill = treated)) +
   geom_histogram(binwidth = 150, position = "dodge") +
@@ -120,6 +129,9 @@ ggplot(df_combined, aes(x = time_since_adaptation, fill = treated)) +
        x = "Time Since Adaptation (Days)",
        y = "Weekly Sales") +
   theme_minimal()
+
+# Save the plot
+ggsave(file.path(output_dir, "time_since_adaptation.png"), width = 8, height = 6)
 
 # Find never adapted manga with the highest total sales charts
 top_charting_day_never_adapted <- df %>%
@@ -143,7 +155,5 @@ ggplot(df_never_adapted, aes(x = time_since_top_charting_day_never_adapted)) +
        y = "Weekly Sales") +
   theme_minimal()
 
-# Save the plots
+# Save the plot
 ggsave(file.path(output_dir, "time_since_top_charting_day_treated.png"), width = 8, height = 6)
-ggsave(file.path(output_dir, "time_since_top_charting_day_untreated.png"), width = 8, height = 6)
-ggsave(file.path(output_dir, "time_since_top_charting_day_combined.png"), width = 8, height = 6)
