@@ -143,3 +143,7 @@ ggplot(df_never_adapted, aes(x = time_since_top_charting_day_never_adapted)) +
        y = "Weekly Sales") +
   theme_minimal()
 
+# Save the plots
+ggsave(file.path(output_dir, "time_since_top_charting_day_treated.png"), width = 8, height = 6)
+ggsave(file.path(output_dir, "time_since_top_charting_day_untreated.png"), width = 8, height = 6)
+ggsave(file.path(output_dir, "time_since_top_charting_day_combined.png"), width = 8, height = 6)
