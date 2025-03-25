@@ -157,3 +157,20 @@ ggplot(df_never_adapted, aes(x = time_since_top_charting_day_never_adapted)) +
 
 # Save the plot
 ggsave(file.path(output_dir, "time_since_top_charting_day_treated.png"), width = 8, height = 6)
+
+# Time since top charting day for not never adapted manga (df$never_adapted==0)
+df_not_never_adapted <- df %>%
+  filter(never_adapted == 0) %>%
+  mutate(time_since_top_charting_day_not_never_adapted = ifelse(search_title %in% top_charting_day$search_title,
+                                                               as.numeric(difftime(weekly_date, top_charting_day$weekly_date[match(search_title, top_charting_day$search_title)], units = "days")), NA))
+
+# Plot the time_since_top_charting_day_not_never_adapted
+ggplot(df_not_never_adapted, aes(x = time_since_top_charting_day_not_never_adapted)) +
+  geom_histogram(binwidth = 125, fill = "orange", color = "black") +
+  labs(title = "Time Since Top Charting Day for Not Never Adapted Manga",
+       x = "Time Since Top Charting Day (Days)",
+       y = "Weekly Sales") +
+  theme_minimal()
+
+# Save the plot
+ggsave(file.path(output_dir, "time_since_top_charting_day_not_never_adapted.png"), width = 8, height = 6)
