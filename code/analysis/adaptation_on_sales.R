@@ -54,3 +54,13 @@ ggplot(df, aes(x = time_since_adaptation, y = weekly, color = factor(treated))) 
   scale_color_discrete(name = "Anime Adaptation") +
   theme_minimal() +
   theme(legend.position = "top")
+
+# Create column for ever adapted, by grouping by search_title and checking if it was ever treated
+df <- df %>%
+  group_by(search_title) %>%
+  mutate(ever_treated = max(treated)) %>%
+  ungroup()
+
+# Fit a linear model but control for ever adapted
+model_ever_treated <- lm(weekly ~ ever_treated + treated + time_since_adaptation + I(time_since_adaptation^2), data = df)
+summary(model_ever_treated)
