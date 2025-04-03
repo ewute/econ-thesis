@@ -36,5 +36,5 @@ manga_index <- manga_index %>%
   )
 
 # Save cleaned data
-write_csv(anime_index, file.path(clean_dir, "anime_data_clean.csv"))
-write_csv(manga_index, file.path(clean_dir, "manga_data_clean.csv"))
+write_csv(anime_index, file.path(clean_dir, "anime_index_clean.csv"))
+write_csv(manga_index, file.path(clean_dir, "manga_index_clean.csv"))
