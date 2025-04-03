@@ -86,5 +86,13 @@ charts_corrections <- charts_corrections %>%
          total_sales = total, 
          reporting_week = final_date)
 
+# Removing 2008 because of messy book keeping
+charts_corrections <- charts_corrections %>%
+  filter(year(reporting_week) != 2008) %>% 
+  mutate(
+    weekly_sales = as.integer(weekly_sales),
+    total_sales = as.integer(total_sales)
+  )
+
 # Save the cleaned data
 write_csv(charts_corrections, file.path(clean_dir, "oricon_charts_clean.csv"))
