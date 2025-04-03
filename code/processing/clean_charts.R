@@ -80,5 +80,11 @@ charts_corrections <- charts_corrections %>%
 charts_corrections <- charts_corrections %>%
   rename_with(tolower)
 
+# Rename weekly to weekly_sales, total to total_sales
+charts_corrections <- charts_corrections %>%
+  rename(weekly_sales = weekly,
+         total_sales = total, 
+         reporting_week = final_date)
+
 # Save the cleaned data
 write_csv(charts_corrections, file.path(clean_dir, "oricon_charts_clean.csv"))
