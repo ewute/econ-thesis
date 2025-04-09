@@ -9,6 +9,10 @@ library(here)
 library(tidyverse)
 library(haven)
 library(AER)
+library(modelsummary)
+library(fixest)
+library(lfe)
+library(stargazer)
 
 ## Directory creation
 

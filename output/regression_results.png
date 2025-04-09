@@ -1,0 +1,77 @@
+
+Regression Results
+===============================================
+                        Dependent variable:    
+                    ---------------------------
+                        log1p(weekly_sales)    
+-----------------------------------------------
+post_adaptation              0.280***          
+                              (0.017)          
+                                               
+log_spec_strength                              
+                                               
+                                               
+log_popularity                                 
+                                               
+                                               
+Action                                         
+                                               
+                                               
+Adventure                                      
+                                               
+                                               
+Comedy                                         
+                                               
+                                               
+Ecchi                                          
+                                               
+                                               
+Fantasy                                        
+                                               
+                                               
+Drama                                          
+                                               
+                                               
+Sports                                         
+                                               
+                                               
+Supernatural                                   
+                                               
+                                               
+Romance                                        
+                                               
+                                               
+Mystery                                        
+                                               
+                                               
+Psychological                                  
+                                               
+                                               
+Sci.Fi                                         
+                                               
+                                               
+Slice.of.Life                                  
+                                               
+                                               
+Horror                                         
+                                               
+                                               
+Thriller                                       
+                                               
+                                               
+Music                                          
+                                               
+                                               
+Mecha                                          
+                                               
+                                               
+Mahou.Shoujo                                   
+                                               
+                                               
+-----------------------------------------------
+Observations                  16,838           
+R2                             0.344           
+Adjusted R2                    0.298           
+Residual Std. Error     0.644 (df = 15736)     
+===============================================
+Note:               *p<0.1; **p<0.05; ***p<0.01

@@ -11,8 +11,8 @@ anime_index <- anime_index %>%
   mutate_all(~na_if(., "N/A")) %>% 
   rename_all(~gsub("anime_", "", .)) %>% 
   mutate(
-    tags = str_split(tags, ",\\s*"),
-    genres = str_split(genres, ",\\s*")
+    tags = sapply(tags, function(x) paste(x, collapse = ", ")),
+    genres = sapply(genres, function(x) paste(x, collapse = ", "))
   ) %>%
   rename(
     mean_score = meanscore,
@@ -20,20 +20,18 @@ anime_index <- anime_index %>%
     end_date = enddate
   )
 
-# Clean manga  data
 manga_index <- manga_index %>%
   rename_all(tolower) %>% 
   mutate_all(~na_if(., "N/A")) %>% 
   rename_all(~gsub("manga_", "", .)) %>% 
-  mutate(
-    tags = str_split(tags, ",\\s*"),
-    genres = str_split(genres, ",\\s*")
-  ) %>%
+  # Remove na in id column
+  filter(!is.na(id)) %>% 
   rename(
     mean_score = meanscore,
     start_date = startdate,
     end_date = enddate
-  )
+  ) %>%
+  select(-series) # drop column series
 
 # Save cleaned data
 write_csv(anime_index, file.path(clean_dir, "anime_index_clean.csv"))
