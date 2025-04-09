@@ -55,3 +55,6 @@ rsconnect/
 *.tsv
 *.zip
 *.rds
+
+/backup/output/*.rds
+
