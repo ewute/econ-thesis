@@ -507,7 +507,7 @@ fe_data_partial_impute <- fe_data_partial_impute %>%
 
 fe_data_partial_impute <- manga_charts_filled %>%
   filter(period %in% c("pre", "post")) %>%
-  filter(between(weeks_relative_to_end, -20, 20)) %>%
+  filter(between(weeks_relative_to_end, -40, 20)) %>%
   filter(on_chart | between(weeks_relative_to_end, -1, 1)) %>%
   mutate(log_sales = log1p(weekly_sales_imputed))
 fe_model_log_partial <- felm(
@@ -536,7 +536,7 @@ ggplot(plot_fe_partial, aes(x = weeks_relative_to_end, y = avg_resid, color = pe
   annotate("text", x = -6.25, y = 1, label = "Typical Season Start", color = "blue", size = 2) +
   theme_minimal()
 
-ggsave(file.path(output_dir, "fe_log_residuals_partial_impute.png"),
+ggsave(file.path(output_dir, "linear_trends_pre_not_during.png"),
        width = 8, height = 6)
 #####
 # Recompute smoothed data
@@ -601,10 +601,31 @@ library(stargazer)
 # --- Filter to ±20 weeks and impute only ±1 week off-chart ---
 fe_data_partial_impute <- manga_charts_filled %>%
   filter(period %in% c("pre", "post")) %>%
-  filter(between(weeks_relative_to_end, -20, 20)) %>%
-  filter(on_chart | between(weeks_relative_to_end, -1, 1)) %>%
+  filter(between(weeks_relative_to_end, -40, 20)) %>% 
   mutate(log_sales = log1p(weekly_sales_imputed))
 
+####
+# --- Plot average log sales by period and relative week
+plot_log_partial <- fe_data_partial_impute %>%
+  group_by(period, weeks_relative_to_end) %>%
+  summarise(avg_log_sales = mean(log_sales, na.rm = TRUE), .groups = "drop")
+
+ggplot(plot_log_partial, aes(x = weeks_relative_to_end, y = avg_log_sales, color = period)) +
+  geom_line(size = 1.1) +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "red") +
+  geom_vline(xintercept = c(-12, -13), linetype = "dotted", color = "blue") +
+  annotate("text", x = -6.25, y = max(plot_log_partial$avg_log_sales), 
+           label = "Typical Season Start", color = "blue", size = 2) +
+  labs(
+    title = "Avg. Log(Weekly Sales + 1) by Anime Ending Proximity",
+    x = "Weeks Since Anime Ended",
+    y = "Log(Weekly Sales + 1)",
+    color = "Period"
+  ) +
+  theme_minimal()
+ggsave(file.path(output_dir, "avg_log_sales_full_impute.png"),
+       width = 8, height = 6)
+####
 # --- FE Regression (title + week fixed effects)
 fe_model_log_partial <- felm(
   log_sales ~ period | title_romaji + reporting_week,
@@ -646,3 +667,155 @@ stargazer(
   out = file.path(output_dir, "fe_model_partial_impute.html")
 )
 
+#####
+
+library(ggplot2)
+library(lubridate)
+library(dplyr)
+
+# Years to include
+years_to_plot <- 2009:2023
+
+# Prepare weekly total sales per year and log-transform
+sales_by_week <- manga_charts_filled %>%
+  filter(year(reporting_week) %in% years_to_plot) %>%
+  mutate(year = year(reporting_week)) %>%
+  group_by(reporting_week, year) %>%
+  summarise(total_sales = sum(weekly_sales_imputed, na.rm = TRUE), .groups = "drop") %>%
+  mutate(log_total_sales = log1p(total_sales))
+
+# Prepare season start dates for each year
+season_starts_df <- lapply(years_to_plot, function(yr) {
+  data.frame(
+    year = yr,
+    season = c("Winter", "Spring", "Summer", "Fall"),
+    date = as.Date(c(
+      paste0(yr, "-01-01"),
+      paste0(yr, "-04-01"),
+      paste0(yr, "-07-01"),
+      paste0(yr, "-10-01")
+    ))
+  )
+}) %>% bind_rows()
+
+# Plot with facets
+ggplot(sales_by_week, aes(x = reporting_week, y = log_total_sales)) +
+  geom_line(color = "black") +
+  geom_vline(data = season_starts_df, aes(xintercept = date), linetype = "dashed", color = "blue") +
+  facet_wrap(~year, scales = "free_x") +
+  labs(
+    title = "Log-Transformed Total Weekly Manga Sales (2009–2023)",
+    x = "Week",
+    y = "log(1 + Total Weekly Sales)",
+    caption = "Dashed lines = anime season starts"
+  ) +
+  theme_minimal() +
+  theme(strip.text = element_text(face = "bold"))
+ggsave(file.path(output_dir, "weekly_sales_by_year.png"),
+       width = 12, height = 8)
+
+#####
+fe_data_partial_impute <- manga_charts_filled %>%
+  filter(period %in% c("pre", "post")) %>%
+  filter(between(weeks_relative_to_end, -40, 40)) %>%
+  filter(on_chart | between(weeks_relative_to_end, -4, 4)) %>%
+  mutate(
+    log_sales = log1p(weekly_sales_imputed),
+    anime_season = case_when(
+      month(end_date) %in% 1:3 ~ "Winter",
+      month(end_date) %in% 4:6 ~ "Spring",
+      month(end_date) %in% 7:9 ~ "Summer",
+      month(end_date) %in% 10:12 ~ "Fall",
+      TRUE ~ NA_character_
+    )
+  )
+fe_model_all_controls <- felm(
+  log_sales ~ period | title_romaji + reporting_week + anime_season,
+  data = fe_data_partial_impute
+)
+
+# Add residuals
+fe_data_partial_impute$resid_log_sales <- resid(fe_model_all_controls)
+
+plot_fe_partial <- fe_data_partial_impute %>%
+  group_by(weeks_relative_to_end) %>%
+  summarise(avg_resid = mean(resid_log_sales, na.rm = TRUE), .groups = "drop") %>%
+  mutate(
+    block = floor(weeks_relative_to_end / 13),
+    block_label = paste0("Block ", block)
+  )
+
+# Define where block boundaries are (excluding 0)
+block_boundaries <- seq(-39, 26, by = 13)
+block_boundaries <- block_boundaries[block_boundaries != 0]  # remove center if needed
+
+ggplot(plot_fe_partial, aes(x = weeks_relative_to_end, y = avg_resid, color = block_label)) +
+  geom_line(size = 1.1) +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "red") +
+  geom_vline(xintercept = block_boundaries, linetype = "dotted", color = "gray50") +
+  labs(
+    title = "Residual Log(Weekly Sales + 1), Colored by 13-Week Blocks",
+    x = "Weeks Since Anime Ended",
+    y = "Residual Log Sales",
+    color = "13-Week Block"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    legend.title = element_text(size = 10),
+    legend.text = element_text(size = 8),
+    strip.text = element_text(face = "bold")
+  )
+ggsave(file.path(output_dir, "residual_log_sales_13_week_blocks.png"),
+       width = 8, height = 6)
+
+#####
+fe_data_partial_impute <- manga_charts_filled %>%
+  filter(period %in% c("pre", "post")) %>%
+  filter(between(weeks_relative_to_end, -40, 40)) %>%
+  filter(on_chart | between(weeks_relative_to_end, -4, 4)) %>%
+  mutate(
+    log_sales = log1p(weekly_sales_imputed),
+    anime_season = case_when(
+      month(end_date) %in% 1:3 ~ "Winter",
+      month(end_date) %in% 4:6 ~ "Spring",
+      month(end_date) %in% 7:9 ~ "Summer",
+      month(end_date) %in% 10:12 ~ "Fall",
+      TRUE ~ NA_character_
+    )
+  )
+
+fe_model_all_controls <- felm(
+  log_sales ~ period | title_romaji + reporting_week + anime_season,
+  data = fe_data_partial_impute
+)
+
+# Add residuals back to same frame
+fe_data_partial_impute$resid_log_sales <- resid(fe_model_all_controls)
+
+plot_fe_partial <- fe_data_partial_impute %>%
+  filter(weeks_relative_to_end <= 20) %>%
+  group_by(weeks_relative_to_end) %>%
+  summarise(avg_resid = mean(resid_log_sales, na.rm = TRUE), .groups = "drop") %>%
+  mutate(
+    block = floor(weeks_relative_to_end / 13),
+    block_label = paste0("Block ", block)
+  )
+ggplot(plot_fe_partial, aes(x = weeks_relative_to_end, y = avg_resid, color = block_label)) +
+  geom_line(size = 1.1) +
+  geom_point(size = 1.2, alpha = 0.6) +  # optional dots for emphasis
+  geom_vline(xintercept = 0, linetype = "dashed", color = "red") +
+  geom_vline(xintercept = block_boundaries, linetype = "dotted", color = "gray50") +
+  scale_color_brewer(palette = "Set1") +  # or another discrete palette
+  labs(
+    title = "Residual Log(Weekly Sales + 1), Colored by 13-Week Blocks",
+    x = "Weeks Since Anime Ended",
+    y = "Residual Log Sales",
+    color = "13-Week Block"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    legend.title = element_text(size = 10),
+    legend.text = element_text(size = 8)
+  )
