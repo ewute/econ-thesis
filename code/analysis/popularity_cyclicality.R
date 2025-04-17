@@ -819,3 +819,124 @@ ggplot(plot_fe_partial, aes(x = weeks_relative_to_end, y = avg_resid, color = bl
     legend.title = element_text(size = 10),
     legend.text = element_text(size = 8)
   )
+#####
+# Filter to non-imputed values (i.e., real weekly_sales) and finite relative weeks
+plot_data <- manga_charts_filled %>%
+  filter(!is.na(weekly_sales), !is.na(weeks_relative_to_end)) %>%
+  filter(between(weeks_relative_to_end, -20, 40))
+
+# Top 5 adapted series with most post-end data
+top_series <- plot_data %>%
+  filter(weeks_relative_to_end >= 0) %>%
+  count(title_romaji, sort = TRUE) %>%
+  slice_head(n = 5) %>%
+  pull(title_romaji)
+
+# Subset to those series
+plot_data_top <- plot_data %>%
+  filter(title_romaji %in% top_series)
+
+# Plot
+# Plot with season bars
+ggplot(plot_data_top, aes(x = weeks_relative_to_end, y = weekly_sales, color = title_romaji, group = title_romaji)) +
+  geom_line(size = .5) +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "gray40", linewidth = 1) +  # Anime end
+  geom_vline(xintercept = c(-13, 13, 26), linetype = "dotted", color = "gray60") +    # Seasonal markers
+  labs(
+    title = "Weekly Sales vs. Weeks Since Anime End",
+    subtitle = "Top 5 Adapted Series (−20 to +40 Weeks, No Imputed Data)",
+    x = "Weeks Since Anime End",
+    y = "Weekly Sales",
+    color = "Series"
+  ) +
+  theme_minimal(base_size = 13)
+ggsave(file.path(output_dir, "weekly_sales_top_series.png"),
+       width = 10, height = 6)
+####
+# Top 5 adapted series with most post-end data
+top_series <- plot_data %>%
+  filter(weeks_relative_to_end >= 0) %>%
+  count(title_romaji, sort = TRUE) %>%
+  slice_head(n = 2) %>%
+  pull(title_romaji)
+
+# Subset to those series
+plot_data_top <- plot_data %>%
+  filter(title_romaji %in% top_series)
+
+# Plot
+# Plot with season bars
+ggplot(plot_data_top, aes(x = weeks_relative_to_end, y = weekly_sales, color = title_romaji, group = title_romaji)) +
+  geom_line(size = .5) +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "gray40", linewidth = 1) +  # Anime end
+  geom_vline(xintercept = c(-13, 13, 26), linetype = "dotted", color = "gray60") +    # Seasonal markers
+  labs(
+    title = "Weekly Sales vs. Weeks Since Anime End",
+    subtitle = "Top 2 Adapted Series (−20 to +40 Weeks, No Imputed Data)",
+    x = "Weeks Since Anime End",
+    y = "Weekly Sales",
+    color = "Series"
+  ) +
+  theme_minimal(base_size = 13)
+ggsave(file.path(output_dir, "spike_pre_no_spike_post.png"),
+       width = 10, height = 6)
+#####
+# Aggregate weekly total sales (non-imputed data only)
+total_weekly_sales <- manga_charts_filled %>%
+  filter(!is.na(weekly_sales)) %>%
+  group_by(reporting_week) %>%
+  summarise(total_sales = sum(weekly_sales, na.rm = TRUE), .groups = "drop")
+
+# Plot
+ggplot(total_weekly_sales, aes(x = reporting_week, y = total_sales)) +
+  geom_line(color = "steelblue", linewidth = 1) +
+  labs(
+    title = "Total Weekly Manga Sales (Across All Charted Series)",
+    x = "Week",
+    y = "Total Weekly Sales"
+  ) +
+  theme_minimal(base_size = 13)
+ggsave(file.path(output_dir, "total_weekly_sales.png"),
+       width = 10, height = 6)
+#####
+# Step 1: Filter only manga with anime adaptations (i.e., has an end_date)
+adapted_only <- manga_charts_filled %>%
+  filter(!is.na(end_date))
+
+# Step 2: Keep only real chart data (no imputed sales)
+adapted_only <- adapted_only %>%
+  filter(!is.na(weekly_sales))
+
+# Step 3: Trim to window around anime end: -40 to +40 weeks
+adapted_window <- adapted_only %>%
+  filter(between(weeks_relative_to_end, -40, 40))
+adapted_weekly_total <- adapted_window %>%
+  group_by(reporting_week) %>%
+  summarise(total_sales = sum(weekly_sales, na.rm = TRUE), .groups = "drop")
+ggplot(adapted_weekly_total, aes(x = reporting_week, y = total_sales)) +
+  geom_line(color = "darkorange", linewidth = 1) +
+  labs(
+    title = "Total Weekly Manga Sales for Adapted Series",
+    subtitle = "−20 to +40 Weeks Around Anime Endings",
+    x = "Week",
+    y = "Total Weekly Sales"
+  ) +
+  theme_minimal(base_size = 13)
+# Step 4: Group by relative week, summing across all series
+adapted_relative_total <- adapted_window %>%
+  group_by(weeks_relative_to_end) %>%
+  summarise(total_sales = sum(weekly_sales, na.rm = TRUE), .groups = "drop")
+
+ggplot(adapted_relative_total, aes(x = weeks_relative_to_end, y = total_sales)) +
+  geom_line(color = "darkorange", linewidth = 1.2) +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "gray40") +  # Anime end
+  geom_vline(xintercept = c(-13, 13, 26), linetype = "dotted", color = "gray60") +  # Seasonal markers
+  labs(
+    title = "Total Weekly Manga Sales (Aligned by Anime End)",
+    subtitle = "All Adapted Series, −40 to +40 Weeks Relative to Anime End",
+    x = "Weeks Since Anime End",
+    y = "Total Weekly Sales"
+  ) +
+  theme_minimal(base_size = 13)
+ggsave(file.path(output_dir, "total_weekly_sales_relative.png"),
+       width = 10, height = 6)

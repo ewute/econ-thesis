@@ -116,7 +116,11 @@ manga_charts_join <- manga_charts %>%
   mutate(
     reporting_week = as.Date(reporting_week),
     end_date = as.Date(end_date),
-    weeks_relative_to_end = as.numeric(difftime(reporting_week, end_date, units = "weeks"))
+    start_date = as.Date(start_date),
+    weeks_relative_to_end = as.numeric(difftime(reporting_week, end_date, units = "weeks")),
+    weeks_relative_to_start = as.numeric(difftime(reporting_week, start_date, units = "weeks")),
+    pre_start = if_else(weeks_relative_to_start <= -1, 1, 0),
+    post_start = if_else(weeks_relative_to_start > 0, 1, 0)
   ) %>% 
   filter(end_date >= as.Date('2009-01-04') & end_date <= as.Date('2023-11-12')) %>% 
   select(-c(id, popularity, match_score)) %>% 
