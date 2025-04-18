@@ -134,3 +134,4 @@ manga_charts_join <- manga_charts %>%
 write_csv(manga_charts_join, file.path(clean_dir, 'manga_charts_clean.csv'))
 write_csv(manga_adaptations, file.path(clean_dir, 'manga_adaptations_clean.csv'))
 write_csv(manga, file.path(clean_dir, 'manga_clean.csv'))
+
