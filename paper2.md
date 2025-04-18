@@ -44,25 +44,13 @@ These genre tendencies align narratively with the visual strengths of televised 
 The analysis relies on a comprehensive dataset combining weekly manga sales from MangaCodex.com with anime metadata from AniList.
 
 ### Weekly Manga Sales Data
-Weekly sales data were collected from MangaCodex, a repository of Oricon’s manga sales rankings. Oricon is a renowned Japanese firm known for accurate entertainment market data.
-
-- Web crawlers identified and collected URLs of weekly manga sales charts.
-- Data from these URLs were scraped and stored in CSV files.
-- CSV files were combined and extensively cleaned to correct inconsistencies, missing data, and typographical errors, ensuring accurate title matching.
+Weekly sales data were collected from MangaCodex, a repository of Oricon’s manga sales rankings. Oricon is a Japanese information and statistics firm known for entertainment market data. URL's of weekly manga sales charts were collected from web crawling. In which afterwards, the site was scraped and stored in CSV files. The CSV files were cleaned for naming inconsistencies, date errors, and typographical errors. Each week's chart was combined via bash script in which we have our raw data complete and ready for further pre-processing.
 
 ### Anime and Manga Metadata
-Detailed anime adaptation metadata were obtained through the AniList API, which provides structured and comprehensive information about anime and manga, including adaptation status and broadcast dates.
-
-- Queries to the AniList API retrieved titles, formats, and adaptation relationships.
-- Official Romaji titles from AniList standardized the title matching process.
+Detailed anime adaptation metadata were obtained through the AniList API, which provides structured and comprehensive information about anime and manga, including adaptation status and broadcast dates. Due to title matching discrepencies between API and MangaCodex titles, the entire database was retrieved so titles could be matched with more accurate algorithms.
 
 ### Title Matching
-Merging MangaCodex and AniList data required fuzzy matching due to discrepancies in naming conventions:
-
-- Typos and naming inconsistencies within MangaCodex listings.
-- Non-standard naming practices, including serialization names and volume-specific identifiers.
-
-A token-based fuzzy string matching algorithm aligned sales data with accurate AniList metadata. This merged dataset enabled precise tracking of manga sales relative to anime adaptation events.
+Merging MangaCodex and AniList data required fuzzy matching due to discrepancies in naming conventions like typos and naming inconsistencies within MangaCodex listings. A token-based fuzzy string matching algorithm aligned sales data with AniList metadata by matching the manga charts titles with the respective manga english titles. This merged dataset allows for easy matching with **unique** Romaji titles between manga and anime datasets.
 
 ## Analysis
 Anime premieres were utilized as proxies for heightened consumer visibility. The analysis was confined to TV-broadcast anime, the most prevalent and marketed adaptation form. Initial visualizations demonstrated manga sales trends around critical anime release windows:
@@ -141,7 +129,7 @@ Overall, the findings emphasize the role of marketing and genre alignment in lev
 ## Appendix
 
 ### A: Data Collection Procedure
-The data collection combined web scraping, API querying, and database management techniques. Weekly manga sales data were gathered via web scraping from MangaCodex.com, an unofficial source for Oricon's manga rankings. The scraping employed Python libraries `requests` and `BeautifulSoup` to send HTTP requests, parse HTML, and systematically store extracted data in structured CSV files. Afterwards, all CSV files were merged into a single comprehensive dataset, covering weekly manga sales from 2009 to 2023.
+The data collection combined web scraping, API querying, and database management. Weekly manga sales data were gathered via web scraping from MangaCodex.com, an unofficial source for Oricon's manga rankings. The scraping employed Python libraries `requests` and `BeautifulSoup` to send HTTP requests, parse HTML, and systematically store extracted data in structured CSV files. Afterwards, all CSV files were merged into a single comprehensive dataset, covering weekly manga sales from 2009 to 2023.
 
 Metadata detailing anime adaptations were acquired using the AniList API. Python scripts queried the API for comprehensive anime and manga information, such as adaptation relationships, broadcast formats, genres, and release dates. Responses from the AniList API were parsed and structured into CSV files, enabling efficient merging with manga sales data.
 
