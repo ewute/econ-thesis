@@ -1,12 +1,12 @@
 ---
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 ---
 # From Screen to Page: How Anime Adaptations Influence Manga Sales
 
 ## Abstract
-Understanding audience engagement is central to effective marketing and media strategies. This study employs a regression discontinuity design (RDD) on weekly manga sales around key anime adaptation dates to estimate the causal impact of anime adaptations on manga sales. While anime premieres and finales show minimal direct effects, pre-release advertisements substantially boost manga sales approximately three weeks prior to airing, highlighting the power of marketing as a driver of consumer interest.
+Understanding audience engagement is central to effective marketing and media strategies. This study employs a regression discontinuity design (RDD) on weekly manga sales around key anime adaptation dates to estimate the causal impact of anime adaptations on manga sales. While anime premieres and finales show minimal direct effects, pre-release advertisements substantially boost manga sales approximately three weeks prior to airing, highlighting the power of marketing as a driver of consumer interest. Interestingly, specific genres that translate well onto the screen differentially gain more visibility from advertising than narrative-driven genres.
 
 ## Introduction
 Adaptations have long been pivotal in entertainment, transforming written stories into visual spectacles. Classic fairy tales such as *Cinderella* and *Snow White* began as literary works, evolved into animated films, and eventually inspired live-action remakes. Films like *The Wizard of Oz* (1939) and *Harry Potter* (2001) further demonstrate the central role adaptations play in media economics. Recently, video games like *League of Legends* have joined this trend with shows such as *Arcane* (2021).
@@ -23,7 +23,6 @@ Anime and manga operate within a tightly integrated media-mix ecosystem in Japan
 As such, manga sales prior to an anime's debut may reflect consumer response to advertising rather than new audience acquisition. Understanding this institutional pipeline contextualizes the observed three-week pre-release sales spike as a strategic marketing phenomenon, not a byproduct of the broadcast itself.
 
 ### Genre Preferences in Anime Adaptations
-
 Anime adaptations often favor visually compelling and narratively engaging genres. Analysis of genre proportions from the AniList database reveals distinct differences in adaptation likelihood based on genre characteristics. Specifically, genres such as **comedy** (56.5% adapted vs. 39.6% non-adapted, difference: +16.8%), **fantasy** (29.9% adapted vs. 22.8% non-adapted, difference: +7.1%), and **action** (32.8% adapted vs. 26.1% non-adapted, difference: +6.8%) are adapted into anime more frequently compared to their proportions among non-adapted manga series.
 
 On the other hand, genres more reliant on intricate narratives rather than visual spectacle, such as **romance** (41.3% adapted vs. 48.1% non-adapted, difference: -6.8%) and **drama** (32.9% adapted vs. 39.5% non-adapted, difference: -6.6%), are slightly less represented among adaptations.
@@ -99,10 +98,17 @@ Genres associated with visually striking content (**mecha**, **sci-fi**, **horro
 This focused genre comparison underscores how the visual and narrative characteristics of manga genres influence their market response to anime adaptation marketing.
 
 ## Results
-Popularity and manga release dates primarily drive manga sales. The analysis supports a significant pre-premiere sales spike, attributed to heightened advertising and consumer anticipation. This spike underscores how anime advertisements effectively stimulate manga sales prior to broadcast.
+The analysis reveals that manga sales are primarily influenced by strategic marketing around anime adaptations rather than the broadcasts themselves. Specifically, a significant increase in manga sales occurs approximately three weeks prior to anime premieres, coinciding with the peak advertising period. This spike underscores advertising's critical role in stimulating consumer interest, particularly highlighting manga series previously overlooked by readers.
 
-Contrary to expectations, anime finales did not yield significant changes in manga sales, suggesting minimal direct migration from anime viewers to manga readers post-broadcast. This indicates either a balanced shift in consumer interest or negligible cross-media migration within the Japanese market.
+Contrary to initial expectations, anime finales do not significantly alter manga sales, suggesting limited cross-media migration from anime viewership to manga readership after a series concludes. Instead, the data imply that heightened sales activity predominantly reflects marketing-induced visibility rather than sustained post-premiere engagement.
 
+The genre-specific analysis further enriches these findings. Visually appealing genres such as **mecha**, **sci-fi**, **horror**, **fantasy**, and **action** exhibit higher proportions of series entering sales charts exclusively after anime-related advertisements begin. This indicates that the visual appeal of these genres, amplified through televised formats and promotional content, effectively captures consumer attention and elevates manga visibility.
+
+Conversely, narrative-intensive genres like **romance** and **psychological** show comparatively lower proportions of manga gaining initial chart visibility due to advertising. These genres likely rely on existing reader loyalty and narrative depth rather than visual spectacle, thus receiving diminished marketing-driven visibility boosts.
+
+These genre-based findings underscore the thematic importance of aligning manga characteristics with the visual strengths of televised anime to maximize the effectiveness of promotional efforts.
+
+### Robustness
 The advertising-driven sales spike is robust even after controlling for visibility biases. Many manga series enter sales charts only after anime marketing begins:
 
 | Time Period | Count |
@@ -123,10 +129,14 @@ Approximately 50% of manga series appearing post-advertisement had not charted p
 
 ![Filtered Pre-Advertisement Manga Sales](output/rdd_start_filtered_pre_on_chart.png)
 
-Thus, anime advertisements act primarily as initial visibility enhancers, driving sustained manga sales rather than immediate post-premiere spikes.
+Even after filtering out series that had not appeared on the charts prior to advertising, post-advertisement chart density remains considerably higher. This shows that once visibility is triggered, manga will continue to perform well, remaining on the charts for weeks. It's difficult to determine the cause as though it's likely due to varying degrees of advertisement, anime performance itself, and ongoing consumer momentum. Nonetheless, the initial “buy phase” appears to be sparked by advertising, with anime adaptation acting as a reinforcing mechanism that extends the sales arc rather than initiating it.
 
 ## Conclusion
-Anime adaptations primarily boost short-term manga visibility rather than long-term engagement. Manga sales significantly increase in anticipation of anime premieres due to effective pre-release advertising. Post-premiere effects are less clear, with minimal evidence suggesting sustained cross-media engagement. Thus, strategic marketing is critical for maximizing manga sales around anime adaptation events.
+Anime adaptations primarily function as catalysts for short-term manga visibility rather than sustained cross-media engagement. Manga sales notably increase during the period preceding anime premieres due to targeted and effective advertising campaigns. However, the post-premiere period does not yield significant sustained consumer interest, suggesting limited viewer transition from anime to manga readership.
+
+The genre-specific analyses highlight an essential marketing strategy insight: manga genres with strong visual elements (**mecha**, **sci-fi**, **horror**, **fantasy**, and **action**) benefit more substantially from anime adaptations and related promotions. Conversely, genres emphasizing intricate storytelling (**romance**, **drama**, **psychological**) rely less on promotional visibility gains, suggesting alternative market dynamics based on established readership and narrative engagement.
+
+Overall, the findings emphasize the role of marketing and genre alignment in leveraging anime adaptations to maximize manga sales effectively. Marketing strategies and adaptation decisions likely  consider these genre-specific dynamics to optimize audience engagement and commercial success.
 
 ## Appendix
 
